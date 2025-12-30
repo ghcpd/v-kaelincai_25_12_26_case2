@@ -1,0 +1,224 @@
+# Role & Objective
+
+You are a senior software engineer tasked with fixing a regression bug in a knapsack solver project and performing comprehensive validation of the fixed implementation.
+
+# Inputs & Context
+
+**Project Structure:**
+- Original buggy project located at: `issue_project/`
+- Detailed bug documentation in: `issue_project/KNOWN_ISSUE.md`
+- Repair instructions in: `REPAIR_PROMPT.md`
+- Source code: `src/knapsack_solver.py` (contains validation regression on line 29)
+- Test suite: `tests/test_knapsack_solver.py`
+
+**Bug Summary:**
+- Type: Regression bug with inverted input validation logic
+- Location: Line 29 in `src/knapsack_solver.py`
+- Impact: All normal inputs with positive weights incorrectly return 0
+- Current state: 4 test failures, 2 passes
+
+# Step-by-Step Instructions
+
+## Phase 1: Analysis & Setup
+
+1. Read and analyze `KNOWN_ISSUE.md` to understand the root cause of the regression bug
+2. Review the buggy implementation in `src/knapsack_solver.py`
+3. Examine all test cases in `tests/test_knapsack_solver.py` to understand expected behavior
+4. Create a new directory `issue_project_fixed/` as a sibling to the original `issue_project/` directory
+
+## Phase 2: Implementation of Fix
+
+1. Copy the entire project structure from `issue_project/` to `issue_project_fixed/`:
+   - `src/__init__.py`
+   - `src/knapsack_solver.py`
+   - `tests/__init__.py`
+   - `tests/test_knapsack_solver.py`
+   - `README.md`
+   - `requirements.txt`
+
+2. Apply the minimal fix to `issue_project_fixed/src/knapsack_solver.py`:
+   - Locate the inverted validation logic (line 29)
+   - Change from: `if any(w > 0 for w in weights): return 0`
+   - Change to: `if any(w <= 0 for w in weights): return 0`
+   - This single-line change corrects the validation to properly reject non-positive weights
+
+3. Ensure the dynamic programming implementation returns mathematically optimal solutions
+
+4. If test expectations do not match mathematically optimal results, update test assertions in `issue_project_fixed/tests/test_knapsack_solver.py` to reflect correct optimal values
+
+## Phase 3: Documentation
+
+1. Create `issue_project_fixed/FIX_SUMMARY.md` containing:
+   - Exact changes made (file path and line numbers)
+   - Explanation of why the change fixes the regression
+   - Test results showing all tests passing
+   - Verification steps performed
+
+2. Update `issue_project_fixed/README.md`:
+   - Remove any warnings about known bugs
+   - Update test results section to show all tests passing
+   - Add a "Fixed Issues" section documenting the regression fix
+
+## Phase 4: Comprehensive Validation
+
+1. **Environment Setup:**
+   - Navigate to the fixed project directory: `issue_project_fixed/`
+   - Install all dependencies from `requirements.txt` if needed
+
+2. **Execute Full Test Suite:**
+   - Run command: `python -m unittest discover tests -v`
+   - Capture complete test output including execution time
+   - Verify all tests pass (expected: 6-7 tests, 100% pass rate)
+
+3. **System Launch Verification:**
+   - Verify the solver module can be imported without errors
+   - Test basic functionality with sample inputs
+   - Ensure no runtime errors or warnings
+
+4. **Test Case Validation:**
+   - Confirm `test_basic_example` passes
+   - Confirm `test_basic_with_items` passes
+   - Confirm `test_classic_example` passes
+   - Confirm `test_empty_items` passes
+   - Confirm `test_empty_knapsack` passes
+   - Confirm `test_simple_case` passes
+   - Confirm `test_single_item_fits` passes
+
+5. **Capture and Document:**
+   - Record all test outputs
+   - Capture any error traces or warnings
+   - Note execution times and performance metrics
+   - Document system behavior under all test scenarios
+
+6. **Validation Summary:**
+   - Explicitly state total number of tests run
+   - Explicitly state number of tests passed/failed
+   - Confirm whether ALL test cases passed
+   - Note any behavioral inconsistencies or edge cases discovered
+
+# Output Specification
+
+**Directory Structure:**
+```
+issue_project_fixed/
+├── src/
+│   ├── __init__.py
+│   └── knapsack_solver.py      # Fixed validation logic
+├── tests/
+│   ├── __init__.py
+│   └── test_knapsack_solver.py # Updated to assert optimal values if needed
+├── README.md                    # Updated with fix documentation
+├── requirements.txt             # Unchanged dependencies
+└── FIX_SUMMARY.md              # Comprehensive fix documentation
+```
+
+**FIX_SUMMARY.md must include:**
+- "Changes Made" section with exact file paths and line numbers
+- "Root Cause Analysis" explaining the regression
+- "Fix Explanation" describing why the change resolves the bug
+- "Test Results" section with complete test output
+- "Validation Steps" documenting verification process
+
+**Validation Report must state:**
+- Total test count and pass/fail breakdown
+- Exact command used to run tests
+- Complete test output
+- Explicit confirmation: "All test cases passed: YES/NO"
+- Runtime behavior summary
+- Any discrepancies or issues encountered
+
+# Constraints & Preferences
+
+**Mandatory Constraints:**
+- DO NOT modify any files in the original `issue_project/` directory
+- Keep the buggy version intact for reference
+- Apply minimal changes - fix only the specific regression, no refactoring
+- All existing test functionality must be preserved
+- Maintain identical project structure and file organization
+
+**Code Quality:**
+- Fix should be a simple, direct correction of the root cause
+- Preserve code clarity and readability
+- Ensure mathematical correctness of the dynamic programming algorithm
+- Update test expectations if they do not match optimal results
+
+**Documentation:**
+- Use clear, precise language in all documentation
+- Include specific line numbers and code snippets
+- Provide complete test output, not summaries
+- State validation results explicitly and unambiguously
+
+# Quality Gates
+
+Before considering the task complete, verify:
+
+✅ **Code Fix:**
+- [ ] `issue_project_fixed/` directory created successfully
+- [ ] All files copied from original project
+- [ ] Validation logic corrected in `knapsack_solver.py`
+- [ ] Fix is minimal (ideally one-line change)
+- [ ] Dynamic programming implementation is mathematically correct
+
+✅ **Testing:**
+- [ ] Test suite runs without import or syntax errors
+- [ ] All 6-7 unit tests pass (100% pass rate)
+- [ ] Test expectations match optimal solutions
+- [ ] Command `python -m unittest discover tests -v` succeeds
+- [ ] No warnings or unexpected behaviors
+
+✅ **Documentation:**
+- [ ] `FIX_SUMMARY.md` created with complete details
+- [ ] `README.md` updated to reflect fixed status
+- [ ] All changes documented with file paths and line numbers
+- [ ] Test results captured and included
+
+✅ **Validation:**
+- [ ] Full test suite executed successfully
+- [ ] All test outputs captured
+- [ ] System launches without errors
+- [ ] Validation summary explicitly states pass/fail status
+- [ ] No regressions introduced by the fix
+
+✅ **Original Project:**
+- [ ] `issue_project/` directory remains unmodified
+- [ ] Buggy version preserved for comparison
+
+# Success Criteria
+
+The task is complete when ALL of the following are true:
+
+1. New directory `issue_project_fixed/` exists with complete project structure
+2. Regression bug fixed with minimal code changes (one-line validation fix)
+3. All 6-7 unit tests pass when running `python -m unittest discover tests -v`
+4. Original buggy project in `issue_project/` remains completely unchanged
+5. `FIX_SUMMARY.md` clearly documents the fix with specific details
+6. Updated `README.md` reflects the fixed status
+7. Complete validation executed with full test suite
+8. Test output captured showing 100% pass rate
+9. Validation summary explicitly confirms all tests passed
+10. System demonstrates consistent behavior under all test scenarios
+
+# Final Verification Checklist
+
+Run these commands and confirm expected results:
+
+```bash
+# Navigate to fixed project
+cd issue_project_fixed/
+
+# Run full test suite with verbose output
+python -m unittest discover tests -v
+
+# Expected output:
+# - Ran 6-7 tests in X.XXXs
+# - OK (no failures or errors)
+# - All individual tests show "ok" status
+```
+
+**The validation is successful ONLY if:**
+- Zero test failures
+- Zero errors
+- All test cases show "ok" status
+- Return code is 0 (success)
+
+Document the complete output and explicitly state: "All test cases passed: YES" or "All test cases passed: NO" with details of any failures.
